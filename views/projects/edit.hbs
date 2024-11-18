@@ -1,0 +1,117 @@
+<h1>
+  {{title}}
+</h1>
+<form method="POST">
+  {{! Input names have to match the name of the fields in the mongo schema object }}
+  {{! Mapping is not automatic, but it's best practices }}
+  <fieldset>
+    <label for="name" class="col-2">
+      Name:
+    </label>
+    <input name="name" id="name" required value="{{project.name}}" />
+  </fieldset>
+  <fieldset>
+    <label for="dueDate" class="col-2">
+      Due Date:
+    </label>
+    {{!-- Use hbs helper function to format date stored in the database accordingly --}}
+    <input name="dueDate" id="dueDate" required type="date" value="{{toShortDate project.dueDate}}" />
+  </fieldset>
+  <fieldset>
+    <label for="course" class="col-2">
+      Course:
+    </label>
+    {{! <input name="course" id="course" required /> }}
+    <select name="course" id="course">
+      {{#each courses}}
+        {{! Use HBS helper function to customize rendering }}
+        {{createOptionElement this.name ../project.course}}
+      {{/each}}
+    </select>
+  </fieldset>
+  {{! Add fieldset for status }}
+  <fieldset>
+    <label for="status" class="col-2">
+      Status:
+    </label>
+    {{! <input name="course" id="course" required /> }}
+    <select name="status" id="status">
+        {{! Use HBS helper function to customize rendering }}
+        {{createOptionElement "TO DO" project.status}}
+        {{createOptionElement "IN PROGRESS" project.status}}
+        {{createOptionElement "DONE" project.status}}
+    </select>
+  </fieldset>
+  {{! Button needs to be inside <form> element to trigger POST }}
+  <button class="offset-3 btn btn-primary">
+    Save
+  </button>
+</form>
+<style>
+  form {
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+fieldset {
+  border: none;
+  margin-bottom: 15px;
+}
+
+label {
+  display: inline-block;
+  width: 100px;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input, select {
+  width: calc(100% - 110px);
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+select {
+  background-color: white;
+}
+
+button {
+  display: block;
+  width: 60%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+
+
+.col-2 {
+  width: 100px;
+}
+
+.offset-3 {
+  margin-left: 110px;
+}
+
+.btn {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.btn-primary {
+  background-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+</style>
