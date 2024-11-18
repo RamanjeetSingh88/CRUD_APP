@@ -51,39 +51,46 @@
     - Routes/Course.js
     - Inject authentication middleware function in GET and POST handlers for '/Courses/Add'
 
-### Part 3 Implementing GitHub authentication
-
-- Open a browser and navigate to https://github.com/settings/applications/new
-    - Application name should be COMP2068 Project Tracker
-    - Homepage URL is http://localhost:3000
-    - Authorization callback URL is http://localhost:3000/github/callback this URL needs to change when deploying to Render or Azure
+### Part 3 Set Up a Project in Google Cloud Console
+Go to Google Cloud Console.
+Click on Select a project → New Project.
+Name your project and click Create.
+Enable OAuth Consent Screen:
+Navigate to APIs & Services → OAuth consent screen.
+Select External (for public access).
+Fill in the details.
+Create OAuth 2.0 Credentials:
+Go to APIs & Services → Credentials → Create credentials → OAuth 2.0 Client IDs.
+Choose Web application as the application type.
+Add your app’s Authorized redirect URIs (e.g., http://localhost:3000/google/callback).
+Click Create, and copy the Client ID and Client Secret.
     - Generate the clientId and clientSecret values and copy them over to your .env file
     - Add three new keys named as below
-        - GITHUB_CLIENT_ID
-        - GITHUB_CLIENT_SECRET
-        - GITHUB_CALLBACK_URL
+        - GOOGLE_CLIENT_ID
+        - GOOGLE_CLIENT_SECRET
+        - GOOGLE_CALLBACK_URL
     - Add the corresponding configuration values in globals.js
         - Create a new section called Authentication
-        - Add an inner section called GitHub
+        - Add an inner section called GOOGLE
         - Add the following keys:
-            - ClientId > use process.env to access GITHUB_CLIENT_ID
-            - ClientSecret > use process.env to access GITHUB_CLIENT_SECRET
-            - CallbackUrl > use process.env to access GITHUB_CALLBACK_URL
+            - ClientId > use process.env to access GOOGLE_CLIENT_ID
+            - ClientSecret > use process.env to access GOOGLE_CLIENT_SECRET
+            - CallbackUrl > use process.env to access GOOGLE_CALLBACK_URL
 - Make sure the application is not running and install the following npm package:
-    - npm i passport-github2
-    - https://www.npmjs.com/package/passport-github2
+    - npm i passport-google-oauth20
+    - https://www.npmjs.com/package/passport-google20
 - In Models/User.js
     - Add oauthId: String to record the ID that's received from the login provider
-    - Add oauthProvider: String to record the provider type (GitHub, Twitter, etc)
+    - Add oauthProvider: String to record the provider type 
     - Add created: Date to record the time when the user is created in the DB
     - Note: When creating a local user, these will be blank.
 - Add a Config folder and create a globals.js file
-    - Add a new section called github and then the following variables:
+    - Add a new section called google and then the following variables:
         - clientId and clientSecret which is used by the authentication
         - callbackUrl which is the url in our application that users will be sent back to after logging in with the external provider
 - In App.js
     - Import the globals.js file at the top of the document
-    - Import the Strategy class in the passport-github2 package just after importing passport and session
+    - Import the Strategy class in the passport-google20 package just after importing passport and session
     - Call passport.use() to configure the github strategy and pass the required API keys and User model
     - Add a callback function to handle two scenarios
         - new user
